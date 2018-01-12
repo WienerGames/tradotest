@@ -1,0 +1,62 @@
+<html>
+	
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<script type="text/javascript" src="airbridge.js" ></script>
+		<script>
+			"use strict";
+			function sendToAIR(randomMessage = "s", stopLoss = 0, takeProfit = 0)
+			{
+				AirBridge.message( "content-for-air" + ", " + randomMessage + ", " + stopLoss + ", " + takeProfit);
+			}
+
+
+			function init(calculatedPip, investment, leverage, ask, bid, accuracy, takeProfit, stopLoss, direction) 
+			{
+				alert("This is init alert!!!");
+				var pip;
+				var averagePrice;
+				var taPipValue;
+				var takeProfitPips;
+				var stopLossPips;
+				var takeProfitRate;
+				var stopLossRate;
+
+				var GET = {};
+				var query = window.location.search.substring(1).split("&");
+
+				pip = calculatedPip * investment * leverage;
+			    averagePrice = ((parseFloat(ask) + parseFloat(bid)) / 2).toFixed(accuracy);
+			    taPipValue = parseFloat(1 / Math.pow(10, accuracy - 1)).toFixed(accuracy);
+
+			    takeProfitPips = parseFloat(takeProfit / pip).toFixed(accuracy);
+			    stopLossPips = parseFloat(stopLoss / pip).toFixed(accuracy);
+
+			    if (direction === "Buy") {
+			        takeProfitRate = parseFloat(parseFloat(averagePrice) + 
+			        	parseFloat((takeProfitPips * taPipValue))).toFixed(accuracy);
+
+			        stopLossRate = parseFloat(parseFloat(averagePrice) - 
+			        	parseFloat((stopLossPips * taPipValue))).toFixed(accuracy);
+			    } else {
+			        takeProfitRate = parseFloat(parseFloat(averagePrice) - 
+			        	parseFloat((takeProfitPips * taPipValue))).toFixed(accuracy);
+
+			        stopLossRate = parseFloat(parseFloat(averagePrice) + 
+			        	parseFloat((stopLossPips * taPipValue))).toFixed(accuracy);
+			    };
+
+			    alert(stopLossRate + " <-> " + takeProfitRate);
+		    	sendToAIR("something for test", stopLossRate, takeProfitRate);
+			}
+		</script>
+	</head>
+	<body>
+		<p>
+			This is a test line to see if script is loaded!!!
+		</p>
+	</body>
+
+</html>
